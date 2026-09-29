@@ -142,6 +142,13 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- Conector de PostgreSQL para Java / Spring Boot -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
