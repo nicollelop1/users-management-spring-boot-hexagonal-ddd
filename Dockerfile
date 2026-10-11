@@ -1,16 +1,16 @@
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
+FROM maven:3.9.11-eclipse-temurin-17 AS build
 
-COPY pom.xml .
+WORKDIR /workspace
+COPY pom.xml ./
 COPY src ./src
+RUN mvn --batch-mode --no-transfer-progress clean package -DskipTests
 
-RUN mvn clean package -DskipTests
+FROM eclipse-temurin:17-jre
 
-FROM eclipse-temurin:17-jre-alpine
+RUN groupadd --system spring && useradd --system --gid spring spring
 WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build --chown=spring:spring /workspace/target/users-management-*.jar app.jar
+USER spring:spring
 
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
